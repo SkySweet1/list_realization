@@ -2,25 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// элемент списка                   typedef struct Node
-// сам список                       typedef struct Link_List
-// создать элемент                  Node* create_Node            
-// создать сам список               Link_List* create_List    
-// добавить в начало                push_FRONT 
-// добавить в конец                 push_BACK
-// вставить по индексу              insert_INDX
-// удалить из начала                pop_FRONT
-// удалить из конца                 pop_BACK
-// удалить по индексу               remove_INX
-// понять какой элемент по счету    find_INLIST
-// получить элемент по индексу      get_INDX
-// изменить элемент по индексу      change_INDX
-// узнать размер списка             size_LIST
-// пуст ли список                   is_EMPT
-// очистить список                  clean_LIST
-// показать список                  print_LIST
-// удалить список                   destroy_LIST
-
 typedef struct Node {
     int data;
     struct Node* next;
