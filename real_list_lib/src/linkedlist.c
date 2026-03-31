@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "linkedlist.h"
 
 typedef struct Node {
     int data;
@@ -170,7 +171,7 @@ int remove_INX(Link_List* list, int indx){
     return data;
 }
 
-int find_INLIST(Link_List* list, int data){
+int find_INLIST(const Link_List* list, int data){
     Node* curr = list->head;
 
     int indx = 0;
@@ -184,10 +185,10 @@ int find_INLIST(Link_List* list, int data){
         indx++;
     }
 
-    exit(1);
+    return -1;
 }
 
-int get_INDX(Link_List* list, int indx){
+int get_INDX(const Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -217,11 +218,11 @@ void change_INDX(Link_List* list, int indx, int data){
     curr->data = data;
 }
 
-int size_LIST(Link_List* list){
+int size_LIST(const Link_List* list){
     return list->size;
 }
 
-bool is_EMPT(Link_List* list){
+bool is_EMPT(const Link_List* list){
     return list->head == NULL;
 }
 
@@ -235,7 +236,7 @@ void clean_LIST(Link_List* list){
     list->size = 0;
 }
 
-void print_LIST(Link_List* list){
+void print_LIST(const Link_List* list){
     Node* curr = list->head;
 
     while(curr != NULL){
@@ -248,6 +249,6 @@ void print_LIST(Link_List* list){
 }
 
 void destroy_LIST(Link_List* list){
-    clear(list);
+    clean_LIST(list);
     free(list);
 }
