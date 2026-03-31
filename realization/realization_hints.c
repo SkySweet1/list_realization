@@ -71,8 +71,8 @@ Node* create_Node(int data) {
 
     все NULL потому что мы создаем без каких либо эл внутри (создаем пустой список)
 */
-Link_List* create_List(){
-    Link_List* list = (Node*)malloc(sizeof(Node));
+Link_List* create_List(void){
+    Link_List* list = (Link_List*)malloc(sizeof(Link_List));
 
     if(list == NULL){
         perror("list memory invalid\n");
@@ -80,7 +80,7 @@ Link_List* create_List(){
     }
 
     list->head = NULL;
-    list->size = NULL;
+    list->size = 0;
 
     return list;
 }
@@ -311,7 +311,7 @@ int remove_INX(Link_List* list, int indx){
 
     а если ненашли то exit(1)
 */
-int find_INLIST(Link_List* list, int data){
+int find_INLIST(const Link_List* list, int data){
     Node* curr = list->head;
 
     int indx = 0;
@@ -325,7 +325,7 @@ int find_INLIST(Link_List* list, int data){
         indx++;
     }
 
-    exit(1);
+    return -1;
 }
 
 /* 8 
@@ -336,7 +336,7 @@ int find_INLIST(Link_List* list, int data){
 
     циклом идем до нужного элемента и возвращаем значение       return curr->data;
 */
-int get_INDX(Link_List* list, int indx){
+int get_INDX(const Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -379,12 +379,12 @@ void change_INDX(Link_List* list, int indx, int data){
 /* 10
     просто вывозвращаем размер т к требуеся просто размер листа 
 */
-int size_LIST(Link_List* list){
+int size_LIST(const Link_List* list){
     return list->size;
 }
 
 // 11
-bool is_EMPT(Link_List* list){
+bool is_EMPT(const Link_List* list){
     return list->head == NULL;
 }
 
@@ -409,7 +409,7 @@ void clean_LIST(Link_List* list){
     выводим вест лист через цикл и добавляем \n
 
 */
-void print_LIST(Link_List* list){
+void print_LIST(const Link_List* list){
     Node* curr = list->head;
 
     while(curr != NULL){
@@ -426,6 +426,6 @@ void print_LIST(Link_List* list){
 
 */
 void destroy_LIST(Link_List* list){
-    clear(list);
+    clean_LIST(list);
     free(list);
 }
