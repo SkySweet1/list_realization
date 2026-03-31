@@ -2,12 +2,10 @@
 #include "linkedlist.h"
 
 int main(void) {
-    // Создаем список
     Link_List* list = create_List();
     
     printf("пуст ли? %d\n", is_EMPT(list));
     
-    // Добавляем элементы в конец
     push_BACK(list, 10);
     push_BACK(list, 20);
     push_BACK(list, 30);
