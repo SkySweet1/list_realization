@@ -55,9 +55,9 @@ int main(void)
     printf("после pop_BACK ");
     print_LIST(list, print_int);
     
-    val = (int*)remove_INX(list, 1);
+    val = (int*)pop_INX(list, 1);
     printf("удаляем индекс 1 %d\n", *val);
-    printf("после remove_INX(1) ");
+    printf("после pop_INX(1) ");
     print_LIST(list, print_int);
     
     clean_LIST(list);
