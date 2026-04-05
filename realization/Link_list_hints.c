@@ -1,3 +1,10 @@
+/*
+UPD: 
+        исправленно:
+            int data -> void* data
+        теперь лист может принимать любые типы
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -8,7 +15,7 @@
 // 0.4  создать сам список               Link_List* create_List    
 // 1    добавить в начало                push_FRONT 
 // 2    добавить в конец                 push_BACK
-// 3    вставить по индексу              insert_INDX
+// 3    вставить по индексу              push_INDX
 // 4    удалить из начала                pop_FRONT
 // 5    удалить из конца                 pop_BACK
 // 6    удалить по индексу               remove_INX
@@ -25,12 +32,11 @@
 /* 0.1
     здесь будет описывать сам элемент списка
 
-    int data;           это сами данные которые можно заменять
+    void* data;           это сами данные которые можно заменять 
     struct Node* next   это указатель на сделующий элемент
-
 */ 
 typedef struct Node {
-    int data;
+    void* data;
     struct Node* next;
 } Node;
 
@@ -52,7 +58,7 @@ typedef struct Link_List {
     newNode->data = data;           кладем данные в элемент
     newNode->next = NULL;           делаем след элемент пустым -> конец списка
 */
-Node* create_Node(int data) {
+static Node* create_Node(void* data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
 
     if(newNode == NULL){
@@ -94,7 +100,7 @@ Link_List* create_List(void){
 
     так же увеличиваем размер
 */
-void push_FRONT(Link_List* list, int data){
+void push_FRONT(Link_List* list, void* data){
     Node* newNode = create_Node(data);
 
     newNode->next = list->head;
@@ -120,7 +126,7 @@ void push_FRONT(Link_List* list, int data){
 
     так же увеличиваем размер
 */
-void push_BACK(Link_List* list, int data){
+void push_BACK(Link_List* list, void* data){
     Node* newNode = create_Node(data);
 
     if(list->head == NULL){
@@ -159,7 +165,7 @@ void push_BACK(Link_List* list, int data){
     увеличиваем размер (т к вставили еще один элемент)
 
 */
-void insert_INDX(Link_List* list, int indx, int data){
+void push_INDX(Link_List* list, int indx, void* data){
     if(indx < 0 || indx > list->size){
         perror("index outsize diap\n");
         exit(EXIT_FAILURE);
@@ -198,14 +204,14 @@ void insert_INDX(Link_List* list, int indx, int data){
     очищаем
     и уменьшаем размер (т к задача была удаляли элемент)
 */
-int pop_FRONT(Link_List* list){
+void* pop_FRONT(Link_List* list){
     if(list->head == NULL){
         perror("empty list\n");
         exit(EXIT_FAILURE);
     }
 
     Node* tm = list->head;
-    int data = tm->data;
+    void* data = tm->data;
 
     list->head = list->head->next;
 
@@ -228,7 +234,7 @@ int pop_FRONT(Link_List* list){
     создаем переменную на которую мы будем заменять элемент, так же передаем ему значение
     заменяем и очищаем
 */
-int pop_BACK(Link_List* list){
+void* pop_BACK(Link_List* list){
     if(list->head == NULL){
         perror("empty list\n");
         exit(EXIT_FAILURE);
@@ -245,7 +251,7 @@ int pop_BACK(Link_List* list){
     }
 
     Node* tm = curr->next;
-    int data = tm->data;
+    void* data = tm->data;
 
     curr->next = NULL;
 
@@ -269,7 +275,7 @@ int pop_BACK(Link_List* list){
     создаем переменную на которую мы будем заменять элемент, так же передаем ему значение
     заменяем и очищаем
 */
-int remove_INX(Link_List* list, int indx){
+void* remove_INX(Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("index outsize diap\n");
         exit(EXIT_FAILURE);
@@ -287,7 +293,7 @@ int remove_INX(Link_List* list, int indx){
     }
 
     Node* tm = curr->next;
-    int data = tm->data;
+    void* data = tm->data;
 
     curr->next = tm->next;
 
@@ -311,13 +317,13 @@ int remove_INX(Link_List* list, int indx){
 
     а если ненашли то exit(1)
 */
-int find_INLIST(const Link_List* list, int data){
+int find_INLIST(const Link_List* list, void* data, int (*compare)(const void*, const void*)){
     Node* curr = list->head;
 
     int indx = 0;
 
     while(curr != NULL){
-        if(curr->data == data){
+        if(compare(curr->data, data) == 0){
             return indx;
         }
 
@@ -336,7 +342,7 @@ int find_INLIST(const Link_List* list, int data){
 
     циклом идем до нужного элемента и возвращаем значение       return curr->data;
 */
-int get_INDX(const Link_List* list, int indx){
+void* get_INDX(const Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -361,7 +367,7 @@ int get_INDX(const Link_List* list, int indx){
 
     curr->data = data;                          ну и заменяем его
 */
-void change_INDX(Link_List* list, int indx, int data){
+void change_INDX(Link_List* list, int indx, void* data){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -409,11 +415,11 @@ void clean_LIST(Link_List* list){
     выводим вест лист через цикл и добавляем \n
 
 */
-void print_LIST(const Link_List* list){
+void print_LIST(const Link_List* list, void (*print_func)(const void*)){
     Node* curr = list->head;
 
     while(curr != NULL){
-        printf("%d ", curr->data);
+        print_func(curr->data);
 
         curr = curr->next;
     }
@@ -429,3 +435,5 @@ void destroy_LIST(Link_List* list){
     clean_LIST(list);
     free(list);
 }
+
+// windbg, dbg. 

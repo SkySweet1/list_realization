@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 typedef struct Node {
-    int data;
+    void* data;
     struct Node* next;
 } Node;
 
@@ -12,7 +12,7 @@ typedef struct Link_List {
     int size;
 } Link_List; 
 
-Node* create_Node(int data){
+static Node* create_Node(void* data){
     Node* newNode = (Node*)malloc(sizeof(Node));
 
     if(newNode == NULL){
@@ -40,7 +40,7 @@ Link_List* create_List(void){
     return list;
 }
 
-void push_FRONT(Link_List* list, int data){
+void push_FRONT(Link_List* list, void* data){
     Node* newNode = create_Node(data);
 
     newNode->next = list->head;
@@ -50,7 +50,7 @@ void push_FRONT(Link_List* list, int data){
     list->size++;
 }
 
-void push_BACK(Link_List* list, int data){
+void push_BACK(Link_List* list, void* data){
     Node* newNode = create_Node(data);
 
     if(list->head == NULL){
@@ -70,7 +70,7 @@ void push_BACK(Link_List* list, int data){
     list->size++;
 }
 
-void insert_INDX(Link_List* list, int indx, int data){
+void push_INDX(Link_List* list, int indx, void* data){
     if(indx < 0 || indx > list->size){
         perror("index outsize diap\n");
         exit(EXIT_FAILURE);
@@ -95,14 +95,14 @@ void insert_INDX(Link_List* list, int indx, int data){
     list->size++;
 }
 
-int pop_FRONT(Link_List* list){
+void* pop_FRONT(Link_List* list){
     if(list->head == NULL){
         perror("empty list\n");
         exit(EXIT_FAILURE);
     }
 
     Node* tm = list->head;
-    int data = tm->data;
+    void* data = tm->data;
 
     list->head = list->head->next;
 
@@ -113,7 +113,7 @@ int pop_FRONT(Link_List* list){
     return data;
 }
 
-int pop_BACK(Link_List* list){
+void* pop_BACK(Link_List* list){
     if(list->head == NULL){
         perror("empty list\n");
         exit(EXIT_FAILURE);
@@ -130,7 +130,7 @@ int pop_BACK(Link_List* list){
     }
 
     Node* tm = curr->next;
-    int data = tm->data;
+    void* data = tm->data;
 
     curr->next = NULL;
 
@@ -141,7 +141,7 @@ int pop_BACK(Link_List* list){
     return data;
 }
 
-int remove_INX(Link_List* list, int indx){
+void* remove_INX(Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("index outsize diap\n");
         exit(EXIT_FAILURE);
@@ -159,7 +159,7 @@ int remove_INX(Link_List* list, int indx){
     }
 
     Node* tm = curr->next;
-    int data = tm->data;
+    void* data = tm->data;
 
     curr->next = tm->next;
 
@@ -170,13 +170,13 @@ int remove_INX(Link_List* list, int indx){
     return data;
 }
 
-int find_INLIST(const Link_List* list, int data){
+int find_INLIST(const Link_List* list, void* data, int (*compare)(const void*, const void*)){
     Node* curr = list->head;
 
     int indx = 0;
 
     while(curr != NULL){
-        if(curr->data == data){
+        if(compare(curr->data, data) == 0){
             return indx;
         }
 
@@ -187,7 +187,7 @@ int find_INLIST(const Link_List* list, int data){
     return -1;
 }
 
-int get_INDX(const Link_List* list, int indx){
+void* get_INDX(const Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -202,7 +202,7 @@ int get_INDX(const Link_List* list, int indx){
     return curr->data;
 }
 
-void change_INDX(Link_List* list, int indx, int data){
+void change_INDX(Link_List* list, int indx, void* data){
     if(indx < 0 || indx >= list->size){
         perror("outsize diap\n");
         exit(EXIT_FAILURE);
@@ -235,11 +235,11 @@ void clean_LIST(Link_List* list){
     list->size = 0;
 }
 
-void print_LIST(const Link_List* list){
+void print_LIST(const Link_List* list, void (*print_func)(const void*)){
     Node* curr = list->head;
 
     while(curr != NULL){
-        printf("%d ", curr->data);
+        print_func(curr->data);
 
         curr = curr->next;
     }
