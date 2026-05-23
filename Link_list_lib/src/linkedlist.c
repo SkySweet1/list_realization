@@ -142,7 +142,7 @@ void* pop_BACK(Link_List* list){
     return data;
 }
 
-void* remove_INX(Link_List* list, int indx){
+void* pop_INX(Link_List* list, int indx){
     if(indx < 0 || indx >= list->size){
         perror("index outsize diap\n");
         exit(EXIT_FAILURE);
