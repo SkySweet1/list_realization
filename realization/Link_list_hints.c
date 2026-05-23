@@ -416,6 +416,10 @@ void clean_LIST(Link_List* list){
 /* 13
     выводим вест лист через цикл и добавляем \n
 
+    void (*print_func)(const void*) означает что это функция, принимающая const void* и ничего не возвращающая (void)
+    Благодаря этому список может хранить данные любого типа (int, float, string, структуру и т.д.)
+    Функция print_func знает, как распечатать конкретный тип данных, который хранится в списке. Когда мы вызываем print_func(curr->data), мы передаем ей данные текущего узла, и она отвечает за их правильное отображение.
+
 */
 void print_LIST(const Link_List* list, void (*print_func)(const void*)){
     Node* curr = list->head;
